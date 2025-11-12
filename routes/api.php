@@ -17,7 +17,12 @@ Route::get('lists/categories', [CategoryController::class, 'list']);
 // Route::put('categories/{category}', [CategoryController::class, 'update']);
 // Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
 
-Route::middleware('auth:sanctum')->group(function(){
-    Route::apiResource('categories', CategoryController::class);
+
+    Route::apiResource('categories', CategoryController::class)
+    ->middleware('auth:sanctum');
     Route::get('products', [ProductController::class , 'index']);
-});
+
+    // Route::post('register', [UserController::class, 'register']);
+    // Route::post('login', [UserController::class, 'login']);
+    // Route::delete('logout', [UserController::class, 'logout']);
+
