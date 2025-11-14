@@ -7,6 +7,11 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
+/**
+ * @group Products
+ * 
+ * Managing Products
+ */
 class ProductController extends Controller
 {
     public function index(){

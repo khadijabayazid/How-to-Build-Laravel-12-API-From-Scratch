@@ -10,9 +10,21 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
 
+/**
+ * @group Categories 
+ * 
+ * Managing Categories
+ */
 
 class CategoryController extends Controller
 {
+    /**
+     * Get Categories
+     * 
+     * Getting the list of the categories
+     * 
+     * @queryParam page Which page to show. Example:12
+     */
     public function index(){
         // return Category::all();
         abort_if(!auth()->user()->tokenCan('categories-list'), 403);
@@ -29,6 +41,11 @@ class CategoryController extends Controller
         return CategoryResource::collection(Category::all());
     }
 
+    /**
+     * Post categories
+     * 
+     * @bodyParam name string required Name of the category. Example: "Clothing
+     */
     public function store(StoreCategoryRequest $request){
         $data = $request->all();
         if($request->hasFile('photo')){
