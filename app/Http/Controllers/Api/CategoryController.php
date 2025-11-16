@@ -10,34 +10,45 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
 
-/**
- * @group Categories 
- * 
- * Managing Categories
- */
+
 
 class CategoryController extends Controller
 {
     /**
-     * Get Categories
-     * 
-     * Getting the list of the categories
-     * 
-     * @queryParam page Which page to show. Example:12
+     * @OA\Get(
+     *  path="/categories",
+     *  tags={"Categories"},
+     *  summary="Get list of categories",
+     *  @OA\Response(
+     *      response=200,
+     *      description="Successful operation",
+     *  ),
+     *  @OA\Response(
+     *      response=401,
+     *      description="Unauthenticated",
+     *  ),
+     *  @OA\Response(
+     *      response=403,
+     *      description="Forbidden",
+     *  )
+     * )
      */
-    public function index(){
+    public function index()
+    {
         // return Category::all();
         abort_if(!auth()->user()->tokenCan('categories-list'), 403);
         return CategoryResource::collection(Category::all());
     }
 
-    public function show(Category $category){
+    public function show(Category $category)
+    {
         // return $category;
         abort_if(!auth()->user()->tokenCan('categories-show'), 403);
         return new CategoryResource($category);
     }
 
-    public function list(){
+    public function list()
+    {
         return CategoryResource::collection(Category::all());
     }
 
@@ -46,9 +57,10 @@ class CategoryController extends Controller
      * 
      * @bodyParam name string required Name of the category. Example: "Clothing
      */
-    public function store(StoreCategoryRequest $request){
+    public function store(StoreCategoryRequest $request)
+    {
         $data = $request->all();
-        if($request->hasFile('photo')){
+        if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $name = 'categories/' . Str::uuid() . '.' . $file->extension();
             $file->storePubliclyAs('public', $name);
@@ -58,12 +70,14 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
-    public function update(Category $category, StoreCategoryRequest $request){
+    public function update(Category $category, StoreCategoryRequest $request)
+    {
         $category->update($request->all());
         return new CategoryResource($category);
     }
 
-    public function destroy(Category $category){
+    public function destroy(Category $category)
+    {
         $category->delete();
         // return response(null, Response::HTTP_NO_CONTENT);
         return response()->noContent();

@@ -14,34 +14,33 @@ Route::get('/user', function (Request $request) {
 
 Route::get('lists/categories', [CategoryController::class, 'list']);
 
-// Route::get('categories', [CategoryController::class ,'index']);
-// Route::get('categories/{category}',[CategoryController::class, 'show']);
-// Route::post('categories', [CategoryController::class, 'store']);
-// Route::put('categories/{category}', [CategoryController::class, 'update']);
-// Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
+Route::get('/docs', function () {
+    $documentation = config('l5-swagger.documentations.default');
 
+    return view('l5-swagger::index', compact('documentation'));
+});
 
-    Route::apiResource('categories', CategoryController::class)
+Route::apiResource('categories', CategoryController::class)
     ->middleware('auth:sanctum');
-    Route::get('products', [ProductController::class , 'index']);
+Route::get('products', [ProductController::class, 'index']);
 
-    // Route::post('register', [UserController::class, 'register']);
-    // Route::post('login', [UserController::class, 'login']);
-    // Route::delete('logout', [UserController::class, 'logout']);
+// Route::post('register', [UserController::class, 'register']);
+// Route::post('login', [UserController::class, 'login']);
+// Route::delete('logout', [UserController::class, 'logout']);
 
-    Route::post('/sanctum/token', function(Request $request){
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-            'device_name' => 'required'
+Route::post('/sanctum/token', function (Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+        'device_name' => 'required'
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (! $user || ! Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'email' => ['The provided credentials are incorrect.'],
         ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if(! $user || ! Hash::check($request->password, $user->password)){
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
-        }
-        return $user->createToken($request->device_name)->plainTextToken;
-    });
+    }
+    return $user->createToken($request->device_name)->plainTextToken;
+});
