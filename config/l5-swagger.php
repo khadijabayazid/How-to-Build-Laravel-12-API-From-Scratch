@@ -5,16 +5,16 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'E-shop Catalog API Docs',
             ],
 
             'routes' => [
                 /*
                  * Route for accessing api documentation interface
                  */
-                'api' => 'api/documentation',
-                'ui'  => true,
-
+                'api' => 'documentation',
+                'docs' => '/api/default/docs',
+                'oauth2_callback' => '/api/default/callback',
             ],
             'paths' => [
                 /*

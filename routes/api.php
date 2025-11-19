@@ -14,12 +14,6 @@ Route::get('/user', function (Request $request) {
 
 Route::get('lists/categories', [CategoryController::class, 'list']);
 
-Route::get('/docs', function () {
-    $documentation = config('l5-swagger.documentations.default');
-
-    return view('l5-swagger::index', compact('documentation'));
-});
-
 Route::apiResource('categories', CategoryController::class)
     ->middleware('auth:sanctum');
 Route::get('products', [ProductController::class, 'index']);
