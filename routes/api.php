@@ -16,7 +16,7 @@ Route::get('lists/categories', [CategoryController::class, 'list']);
 
 Route::apiResource('categories', CategoryController::class)
     ->middleware('auth:sanctum');
-Route::get('products', [ProductController::class, 'index']);
+Route::get('products', [ProductController::class, 'index'])->middleware('throttle:products');
 
 // Route::post('register', [UserController::class, 'register']);
 // Route::post('login', [UserController::class, 'login']);

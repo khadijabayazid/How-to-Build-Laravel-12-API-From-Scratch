@@ -37,7 +37,7 @@ class CategoryController extends Controller
     {
         // return Category::all();
         abort_if(!auth()->user()->tokenCan('categories-list'), 403);
-        return CategoryResource::collection(Category::where('id','<','3')->get());
+        return CategoryResource::collection(Category::where('id','<',3)->get());
     }
 
     public function show(Category $category)
